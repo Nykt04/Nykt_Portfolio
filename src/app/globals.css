@@ -1,26 +1,160 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f8ff;
+  --foreground: #0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-press-start-2p), "Courier New", monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.cloud {
+  position: absolute;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  filter: blur(1px);
+  animation: drift 18s ease-in-out infinite alternate;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+}
+
+.cloud-a {
+  top: 14%;
+  left: 8%;
+  width: 130px;
+  height: 40px;
+}
+
+.cloud-a::before {
+  width: 45px;
+  height: 45px;
+  left: 15px;
+  top: -20px;
+}
+
+.cloud-a::after {
+  width: 60px;
+  height: 60px;
+  right: 20px;
+  top: -24px;
+}
+
+.cloud-b {
+  top: 24%;
+  right: 16%;
+  width: 150px;
+  height: 42px;
+  animation-duration: 22s;
+}
+
+.cloud-b::before {
+  width: 55px;
+  height: 55px;
+  left: 22px;
+  top: -22px;
+}
+
+.cloud-b::after {
+  width: 70px;
+  height: 70px;
+  right: 16px;
+  top: -28px;
+}
+
+.cloud-c {
+  top: 8%;
+  right: 40%;
+  width: 110px;
+  height: 34px;
+  animation-duration: 16s;
+}
+
+.cloud-c::before {
+  width: 38px;
+  height: 38px;
+  left: 12px;
+  top: -18px;
+}
+
+.cloud-c::after {
+  width: 46px;
+  height: 46px;
+  right: 12px;
+  top: -20px;
+}
+
+.sun-glow {
+  position: absolute;
+  top: -15%;
+  right: -5%;
+  width: 380px;
+  height: 380px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 217, 102, 0.65), rgba(255, 217, 102, 0));
+  filter: blur(10px);
+  animation: pulse 8s ease-in-out infinite alternate;
+}
+
+.hills {
+  position: absolute;
+  bottom: 8%;
+  left: -8%;
+  width: 120%;
+  height: 240px;
+  background: linear-gradient(180deg, rgba(90, 191, 65, 0.65), rgba(48, 128, 60, 0.9));
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-2deg);
+}
+
+.grass {
+  position: absolute;
+  bottom: 0;
+  left: -5%;
+  width: 110%;
+  height: 110px;
+  background: linear-gradient(180deg, rgba(85, 175, 72, 0.95), rgba(53, 125, 54, 0.95));
+  animation: sway 7s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(16px, 8px, 0); }
+}
+
+@keyframes pulse {
+  from { transform: scale(0.96); opacity: 0.75; }
+  to { transform: scale(1.04); opacity: 1; }
+}
+
+@keyframes sway {
+  from { transform: skewX(-4deg) translateY(0); }
+  to { transform: skewX(4deg) translateY(-4px); }
 }
