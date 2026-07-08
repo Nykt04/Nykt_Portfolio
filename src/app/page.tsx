@@ -79,9 +79,7 @@ const apps: AppWindow[] = [
   { id: "experience", title: "Experience", icon: <BriefcaseBusiness size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 380, y: 120 } },
   { id: "certificates", title: "Certificates", icon: <BadgeCheck size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 460, y: 92 } },
   { id: "resume", title: "Resume", icon: <FileText size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 540, y: 88 } },
-  { id: "contact", title: "Contact", icon: <Mail size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 620, y: 128 } },
-  { id: "computer", title: "My Computer", icon: <Computer size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 200, y: 160 } },
-  
+  { id: "contact", title: "Contact", icon: <Mail size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 620, y: 128 } },  
 ];
 
 const projectsData: Project[] = [
@@ -112,16 +110,17 @@ const projectsData: Project[] = [
 const skills = [
   { category: "Frontend", items: [{ label: "React", value: 70 }, { label: "Next.js", value: 70 }, { label: "Tailwind", value: 50 }] },
   { category: "Backend", items: [{ label: "Node.js", value: 70 }, { label: "API Design", value: 60 }, { label: "Performance", value: 70 }] },
-  { category: "Mobile", items: [{ label: "React Native", value: 67 }, , { label: "UI Patterns", value: 75 }] },
-  { category: "Database", items: [{ label: "PostgreSQL", value: 78 },  { label: "Supabase", value: 79 }] },
+  { category: "Mobile", items: [{ label: "React Native", value: 67 }, { label: "UI Patterns", value: 75 }] },
+  { category: "Database", items: [{ label: "PostgreSQL", value: 78 }, { label: "Supabase", value: 79 }] },
   { category: "UI/UX", items: [{ label: "Design Systems", value: 85 }, { label: "Accessibility", value: 85 }, { label: "Prototyping", value: 89 }] },
   { category: "Tools", items: [{ label: "Figma", value: 91 }, { label: "Framer Motion", value: 70 }, { label: "Vercel", value: 84 }] },
 ];
 
 const certificateImages = [
-  { title: "UX Strategy", subtitle: "Advanced Product Design" },
-  { title: "Modern Frontend", subtitle: "Next.js & Performance" },
-  { title: "Design Systems", subtitle: "Scalable UI Foundations" },
+  { title: "HTML Essentials", subtitle: "CISCO Certified" },
+  { title: "CSS Essentials", subtitle: "CISCO Certified" },
+  { title: "Python  Essentials 1", subtitle: "CISCO Certified" },
+    { title: "Python  Essentials 2", subtitle: "CISCO Certified" },
 ];
 
 const stats = [
@@ -129,6 +128,23 @@ const stats = [
   { label: "Launches", value: "Secret" },
   { label: "Happy Clients", value: "-0" },
   { label: "Coffee Cups", value: "∞" },
+];
+
+const experienceTimeline = [
+  {
+    company: "ByteWise",
+    role: "Project Manager",
+    duration: "March 2026 – Present",
+    description: "Project Manager of Project CHECK8, leading team coordination, planning, and development of a QR-based digital clearance system.",
+    achievements: ["Improved UI consistency across product launches", "Delivered responsive, accessible web apps"],
+  },
+  {
+    company: "ByteWise",
+    role: "Main Developer",
+    duration: "March 2026 – Present",
+    description: "Main Developer of AceIT, responsible for developing and implementing an AI-powered quiz generation system that transforms study materials into interactive quizzes.",
+    achievements: ["Built launch-ready products for multiple clients", "Enhanced onboarding and visual systems"],
+  },
 ];
 
 const desktopIcons = [
@@ -140,7 +156,6 @@ const desktopIcons = [
   { id: "experience" as WindowId, title: "Experience", icon: <BriefcaseBusiness size={40} /> },
   { id: "certificates" as WindowId, title: "Certificates", icon: <BadgeCheck size={40} /> },
   { id: "contact" as WindowId, title: "Contact", icon: <Mail size={40 } /> },
-  { id: "computer" as WindowId, title: "My Computer", icon: <Computer size={40} /> },
   { id: "computer" as WindowId, title: "Recycle Bin", icon: <Trash2 size={40} /> },
 ];
 
