@@ -72,18 +72,16 @@ type Project = {
 };
 
 const apps: AppWindow[] = [
-  { id: "portfolio", title: "My Portfolio", icon: <UserCircle2 size={18} />, defaultSize: { width: 380, height: 500 }, defaultPosition: { x: 64, y: 64 } },
-  { id: "about", title: "About Me", icon: <UserCircle2 size={18} />, defaultSize: { width: 360, height: 460 }, defaultPosition: { x: 140, y: 116 } },
-  { id: "skills", title: "Skills", icon: <Code2 size={18} />, defaultSize: { width: 420, height: 500 }, defaultPosition: { x: 220, y: 92 } },
-  { id: "projects", title: "Projects", icon: <FolderKanban size={18} />, defaultSize: { width: 430, height: 520 }, defaultPosition: { x: 300, y: 80 } },
-  { id: "experience", title: "Experience", icon: <BriefcaseBusiness size={18} />, defaultSize: { width: 400, height: 460 }, defaultPosition: { x: 380, y: 120 } },
-  { id: "certificates", title: "Certificates", icon: <BadgeCheck size={18} />, defaultSize: { width: 360, height: 420 }, defaultPosition: { x: 460, y: 92 } },
-  { id: "resume", title: "Resume", icon: <FileText size={18} />, defaultSize: { width: 390, height: 500 }, defaultPosition: { x: 540, y: 88 } },
-  { id: "contact", title: "Contact", icon: <Mail size={18} />, defaultSize: { width: 370, height: 470 }, defaultPosition: { x: 620, y: 128 } },
-  { id: "computer", title: "My Computer", icon: <Computer size={18} />, defaultSize: { width: 360, height: 420 }, defaultPosition: { x: 200, y: 160 } },
-  { id: "paint", title: "Paint", icon: <PaintbrushVertical size={18} />, defaultSize: { width: 330, height: 410 }, defaultPosition: { x: 260, y: 180 } },
-  { id: "solitaire", title: "Solitaire", icon: <Gamepad2 size={18} />, defaultSize: { width: 340, height: 420 }, defaultPosition: { x: 320, y: 200 } },
-  { id: "minesweeper", title: "Minesweeper", icon: <Sparkles size={18} />, defaultSize: { width: 320, height: 400 }, defaultPosition: { x: 380, y: 220 } },
+  { id: "portfolio", title: "My Portfolio", icon: <UserCircle2 size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 64, y: 64 } },
+  { id: "about", title: "About Me", icon: <UserCircle2 size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 140, y: 116 } },
+  { id: "skills", title: "Skills", icon: <Code2 size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 220, y: 92 } },
+  { id: "projects", title: "Projects", icon: <FolderKanban size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 300, y: 80 } },
+  { id: "experience", title: "Experience", icon: <BriefcaseBusiness size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 380, y: 120 } },
+  { id: "certificates", title: "Certificates", icon: <BadgeCheck size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 460, y: 92 } },
+  { id: "resume", title: "Resume", icon: <FileText size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 540, y: 88 } },
+  { id: "contact", title: "Contact", icon: <Mail size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 620, y: 128 } },
+  { id: "computer", title: "My Computer", icon: <Computer size={18} />, defaultSize: { width: 500, height: 600 }, defaultPosition: { x: 200, y: 160 } },
+  
 ];
 
 const projectsData: Project[] = [
@@ -92,7 +90,7 @@ const projectsData: Project[] = [
     id: "ace-it",
     title: "ACE IT",
     description: "A polished educational web experience focused on clarity, responsiveness, and modern UI patterns for a learning platform.",
-    stack: ["Next.js", "Tailwind", "Vercel"],
+    stack: ["Next.js", "TypeScript", "JavaScript", "SupaBase", "Vercel"],
     tags: ["Education", "UI Design"],
     accent: "from-[#7C3AED] to-[#A78BFA]",
     bg: "from-violet-100 to-fuchsia-50",
@@ -112,17 +110,12 @@ const projectsData: Project[] = [
 ];
 
 const skills = [
-  { category: "Frontend", items: [{ label: "React", value: 95 }, { label: "Next.js", value: 92 }, { label: "Tailwind", value: 94 }] },
-  { category: "Backend", items: [{ label: "Node.js", value: 90 }, { label: "API Design", value: 86 }, { label: "Performance", value: 88 }] },
-  { category: "Mobile", items: [{ label: "React Native", value: 78 }, { label: "Expo", value: 82 }, { label: "UI Patterns", value: 81 }] },
-  { category: "Database", items: [{ label: "PostgreSQL", value: 85 }, { label: "Prisma", value: 84 }, { label: "Supabase", value: 83 }] },
-  { category: "UI/UX", items: [{ label: "Design Systems", value: 93 }, { label: "Accessibility", value: 90 }, { label: "Prototyping", value: 89 }] },
-  { category: "Tools", items: [{ label: "Figma", value: 91 }, { label: "Framer Motion", value: 87 }, { label: "Vercel", value: 88 }] },
-];
-
-const experienceTimeline = [
-  { company: "Northstar Labs", role: "Senior Frontend Engineer", duration: "2023 – Present", description: "Designing premium product experiences, component systems, and performance-first interfaces for SaaS clients.", achievements: ["Boosted Lighthouse scores by 22%", "Led a reusable design language"] },
-  { company: "Aurelia Studio", role: "Product Designer & Developer", duration: "2020 – 2023", description: "Bridged UX strategy and implementation to ship polished launch sites and internal tools.", achievements: ["Built 12+ launch-ready products", "Improved onboarding completion by 31%"] },
+  { category: "Frontend", items: [{ label: "React", value: 70 }, { label: "Next.js", value: 70 }, { label: "Tailwind", value: 50 }] },
+  { category: "Backend", items: [{ label: "Node.js", value: 70 }, { label: "API Design", value: 60 }, { label: "Performance", value: 70 }] },
+  { category: "Mobile", items: [{ label: "React Native", value: 67 }, , { label: "UI Patterns", value: 75 }] },
+  { category: "Database", items: [{ label: "PostgreSQL", value: 78 },  { label: "Supabase", value: 79 }] },
+  { category: "UI/UX", items: [{ label: "Design Systems", value: 85 }, { label: "Accessibility", value: 85 }, { label: "Prototyping", value: 89 }] },
+  { category: "Tools", items: [{ label: "Figma", value: 91 }, { label: "Framer Motion", value: 70 }, { label: "Vercel", value: 84 }] },
 ];
 
 const certificateImages = [
@@ -132,23 +125,23 @@ const certificateImages = [
 ];
 
 const stats = [
-  { label: "Years of Craft", value: "6+" },
-  { label: "Launches", value: "24" },
-  { label: "Happy Clients", value: "18" },
+  { label: "Years of Craft", value: "Error 404" },
+  { label: "Launches", value: "Secret" },
+  { label: "Happy Clients", value: "-0" },
   { label: "Coffee Cups", value: "∞" },
 ];
 
 const desktopIcons = [
-  { id: "portfolio" as WindowId, title: "My Portfolio", icon: <Monitor size={34} /> },
-  { id: "about" as WindowId, title: "About Me", icon: <UserCircle2 size={34} /> },
-  { id: "projects" as WindowId, title: "Projects", icon: <FolderKanban size={34} /> },
-  { id: "skills" as WindowId, title: "Skills", icon: <Code2 size={34} /> },
-  { id: "resume" as WindowId, title: "Resume", icon: <FileText size={34} /> },
-  { id: "experience" as WindowId, title: "Experience", icon: <BriefcaseBusiness size={34} /> },
-  { id: "certificates" as WindowId, title: "Certificates", icon: <BadgeCheck size={34} /> },
-  { id: "contact" as WindowId, title: "Contact", icon: <Mail size={34} /> },
-  { id: "computer" as WindowId, title: "My Computer", icon: <Computer size={34} /> },
-  { id: "computer" as WindowId, title: "Recycle Bin", icon: <Trash2 size={34} /> },
+  { id: "portfolio" as WindowId, title: "My Portfolio", icon: <Monitor size={40} /> },
+  { id: "about" as WindowId, title: "About Me", icon: <UserCircle2 size={40} /> },
+  { id: "projects" as WindowId, title: "Projects", icon: <FolderKanban size={40} /> },
+  { id: "skills" as WindowId, title: "Skills", icon: <Code2 size={40} /> },
+  { id: "resume" as WindowId, title: "Resume", icon: <FileText size={40} /> },
+  { id: "experience" as WindowId, title: "Experience", icon: <BriefcaseBusiness size={40} /> },
+  { id: "certificates" as WindowId, title: "Certificates", icon: <BadgeCheck size={40} /> },
+  { id: "contact" as WindowId, title: "Contact", icon: <Mail size={40 } /> },
+  { id: "computer" as WindowId, title: "My Computer", icon: <Computer size={40} /> },
+  { id: "computer" as WindowId, title: "Recycle Bin", icon: <Trash2 size={40} /> },
 ];
 
 const startItems = [
@@ -162,8 +155,8 @@ export default function Home() {
   const [theme, setTheme] = useState<"xp" | "dark">("xp");
   const [booting, setBooting] = useState(true);
   const [startOpen, setStartOpen] = useState(false);
-  const [openWindows, setOpenWindows] = useState<WindowId[]>(["portfolio"]);
-  const [activeWindow, setActiveWindow] = useState<WindowId | null>("portfolio");
+  const [openWindows, setOpenWindows] = useState<WindowId[]>(["portfolio", "skills"]);
+  const [activeWindow, setActiveWindow] = useState<WindowId | null>("skills");
   const [minimized, setMinimized] = useState<Record<WindowId, boolean>>({
     portfolio: false,
     about: false,
@@ -351,11 +344,11 @@ export default function Home() {
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-[18px] border border-slate-200/70 bg-white/70 p-4">
                 <h4 className="mb-2 font-semibold">Education</h4>
-                <p className="text-sm opacity-80">B.Sc. in Human-Computer Interaction, University of London</p>
+                <p className="text-sm opacity-80">Bachelor of Science in Computer Science, Gordon College</p>
               </div>
               <div className="rounded-[18px] border border-slate-200/70 bg-white/70 p-4">
                 <h4 className="mb-2 font-semibold">Interests</h4>
-                <p className="text-sm opacity-80">Motion design, music, analog photography, and coffee-fueled debugging.</p>
+                <p className="text-sm opacity-80">Games, Money, and coffee-fueled debugging.</p>
               </div>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
