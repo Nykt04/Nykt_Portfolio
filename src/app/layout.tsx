@@ -19,7 +19,7 @@ const pressStart2P = Press_Start_2P({
 });
 
 export const metadata: Metadata = {
-  title: "Alicia Rivera | XP-Inspired Portfolio",
+  title: "Gian_Portfolio",
   description: "A modern Windows XP-inspired portfolio experience with elegant windowed interactions and polished storytelling.",
 };
 
