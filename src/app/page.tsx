@@ -170,8 +170,8 @@ export default function Home() {
   const [theme, setTheme] = useState<"xp" | "dark">("xp");
   const [booting, setBooting] = useState(true);
   const [startOpen, setStartOpen] = useState(false);
-  const [openWindows, setOpenWindows] = useState<WindowId[]>(["portfolio", "skills"]);
-  const [activeWindow, setActiveWindow] = useState<WindowId | null>("skills");
+  const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
+  const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
   const [minimized, setMinimized] = useState<Record<WindowId, boolean>>({
     portfolio: false,
     about: false,
