@@ -122,10 +122,10 @@ const resumeFile = "/resume.pdf";
 const contactEmail = "giankarloreguindin811@gmail.com";
 
 const certificateImages = [
-  { title: "HTML Essentials", subtitle: "CISCO Certified", image: "/cert-html.JPG" },
-  { title: "CSS Essentials", subtitle: "CISCO Certified", image: "/cert-css.JPG" },
-  { title: "Python Essentials 1", subtitle: "CISCO Certified", image: "/cert-python-1.JPG" },
-  { title: "Python Essentials 2", subtitle: "CISCO Certified", image: "/cert-python-2.JPG" },
+  { title: "HTML Essentials", subtitle: "CISCO Certified", image: "/cert-html.jpg" },
+  { title: "CSS Essentials", subtitle: "CISCO Certified", image: "/cert-css.jpg" },
+  { title: "Python Essentials 1", subtitle: "CISCO Certified", image: "/cert-python-1.jpg" },
+  { title: "Python Essentials 2", subtitle: "CISCO Certified", image: "/cert-python-2.jpg" },
 ];
 
 const stats = [
