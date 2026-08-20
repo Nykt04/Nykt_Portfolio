@@ -24,6 +24,66 @@ body {
   overflow: hidden;
 }
 
+@media (pointer: fine) {
+  body,
+  button,
+  a,
+  input,
+  textarea {
+    cursor: none;
+  }
+}
+
+.custom-cursor {
+  position: fixed;
+  z-index: 300;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(0 2px 3px rgba(15, 23, 42, 0.85));
+  transition: left 70ms ease-out, top 70ms ease-out;
+}
+
+.desktop-grid {
+  position: relative;
+  min-height: 190px;
+}
+
+.desktop-grid::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+}
+
+.desktop-icon-art {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.group:hover .desktop-icon-art {
+  transform: rotate(-3deg) scale(1.08);
+  box-shadow: 0 12px 24px rgba(36, 94, 219, 0.28);
+}
+
+.status-pulse {
+  animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
 button,
 input,
 textarea {

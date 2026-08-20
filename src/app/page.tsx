@@ -24,6 +24,7 @@ import {
   MessageCircleMore,
   Minus,
   Monitor,
+  MousePointer2,
   PaintbrushVertical,
   PenTool,
   Phone,
@@ -79,8 +80,8 @@ const apps: AppWindow[] = [
   { id: "projects", title: "Projects", icon: <FolderKanban size={18} />, defaultSize: { width: 620, height: 680 }, defaultPosition: { x: 300, y: 80 } },
   { id: "experience", title: "Experience", icon: <BriefcaseBusiness size={18} />, defaultSize: { width: 620, height: 680 }, defaultPosition: { x: 380, y: 120 } },
   { id: "certificates", title: "Certificates", icon: <BadgeCheck size={18} />, defaultSize: { width: 620, height: 680 }, defaultPosition: { x: 460, y: 92 } },
-  { id: "resume", title: "Resume", icon: <FileText size={18} />, defaultSize: { width: 550, height: 570 }, defaultPosition: { x: 540, y: 88 } },
-  { id: "contact", title: "Contact", icon: <Mail size={18} />, defaultSize: { width: 620, height: 680 }, defaultPosition: { x: 620, y: 128 } },  
+  { id: "resume", title: "Resume", icon: <FileText size={18} />, defaultSize: { width: 700, height: 650 }, defaultPosition: { x: 540, y: 88 } },
+  { id: "contact", title: "Contact", icon: <Mail size={18} />, defaultSize: { width: 650, height: 500 }, defaultPosition: { x: 620, y: 128 } },  
 ];
 
 const projectsData: Project[] = [
@@ -104,6 +105,16 @@ const projectsData: Project[] = [
     accent: "from-[#0F766E] to-[#2DD4BF]",
     bg: "from-teal-100 to-cyan-50",
     url: "https://crhs-web.vercel.app/home.html",
+  },
+  {
+    id: "check8",
+    title: "Check8",
+    description: "A QR-based digital clearance system designed for Computer Science students at Gordon College.",
+    stack: ["Python", "JavaScript", "Render", "SQLAlchemy"],
+    tags: ["School", "Web App"],
+    accent: "from-[#B45309] to-[#F59E0B]",
+    bg: "from-amber-100 to-orange-50",
+    url: "https://check8-1.onrender.com",
   },
  
 ];
@@ -150,6 +161,13 @@ const experienceTimeline = [
     description: "Main Developer of AceIT, responsible for developing and implementing an AI-powered quiz generation system that transforms study materials into interactive quizzes.",
     achievements: ["Built launch-ready products for multiple clients", "Enhanced onboarding and visual systems"],
   },
+  {
+    company: "Castillejos Resettlement High School",
+    role: "School IT Assistant",
+    duration: "Internship",
+    description: "Supported the school community with day-to-day information technology needs, troubleshooting, and basic technical assistance.",
+    achievements: ["Provided technical support for school devices and users", "Helped maintain a reliable digital learning environment"],
+  },
 ];
 
 const desktopIcons = [
@@ -174,6 +192,7 @@ const startItems = [
 export default function Home() {
   const [theme, setTheme] = useState<"xp" | "dark">("xp");
   const [booting, setBooting] = useState(true);
+  const [welcomeScreen, setWelcomeScreen] = useState(false);
   const [startOpen, setStartOpen] = useState(false);
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
   const [activeWindow, setActiveWindow] = useState<WindowId | null>(null);
@@ -215,8 +234,10 @@ export default function Home() {
   const [contactError, setContactError] = useState("");
   const [bsod, setBsod] = useState(false);
   const [shuttingDown, setShuttingDown] = useState(false);
+  const [restartRequired, setRestartRequired] = useState(false);
   const [viewPort, setViewPort] = useState({ width: 1280, height: 900 });
   const [clock, setClock] = useState("11:00 AM");
+  const [pointer, setPointer] = useState({ x: -40, y: -40 });
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -227,6 +248,13 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const updatePointer = (event: MouseEvent) => setPointer({ x: event.clientX, y: event.clientY });
+    window.addEventListener("mousemove", updatePointer);
+    return () => window.removeEventListener("mousemove", updatePointer);
+  }, []);
+
+  useEffect(() => {
     const updateSize = () => setViewPort({ width: window.innerWidth, height: window.innerHeight });
     updateSize();
     window.addEventListener("resize", updateSize);
@@ -234,7 +262,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => setBooting(false), 2200);
+    const timeout = window.setTimeout(() => {
+      setBooting(false);
+      setWelcomeScreen(true);
+    }, 2200);
     return () => window.clearTimeout(timeout);
   }, []);
 
@@ -319,9 +350,25 @@ export default function Home() {
     setMaximized((prev) => ({ ...prev, [windowId]: !prev[windowId] }));
   };
 
+  const beginWindowDrag = (windowId: WindowId, clientX: number, clientY: number) => {
+    setDragging({ id: windowId, offsetX: clientX - positions[windowId].x, offsetY: clientY - positions[windowId].y });
+  };
+
   const handleStartAction = (windowId: WindowId) => {
     openWindow(windowId);
     setStartOpen(false);
+  };
+
+  const restartSystem = () => {
+    setRestartRequired(false);
+    setBooting(true);
+    setWelcomeScreen(false);
+    setOpenWindows([]);
+    setActiveWindow(null);
+    window.setTimeout(() => {
+      setBooting(false);
+      setWelcomeScreen(true);
+    }, 2200);
   };
 
   const triggerShutdown = () => {
@@ -329,12 +376,7 @@ export default function Home() {
     setStartOpen(false);
     window.setTimeout(() => {
       setShuttingDown(false);
-      setBooting(true);
-      setOpenWindows(["portfolio"]);
-      setActiveWindow("portfolio");
-      setMinimized((prev) => ({ ...prev, portfolio: false }));
-      setMaximized((prev) => ({ ...prev, portfolio: false }));
-      setPositions((prev) => ({ ...prev, portfolio: apps.find((app) => app.id === "portfolio")?.defaultPosition ?? { x: 64, y: 64 } }));
+      setRestartRequired(true);
     }, 1800);
   };
 
@@ -417,6 +459,23 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            <div className={`grid gap-3 rounded-[20px] border p-4 sm:grid-cols-3 ${panelBorder} ${panelBg} ${panelText}`}>
+              <button onClick={() => openWindow("skills")} className="group rounded-[16px] border border-transparent bg-white/60 p-3 text-left transition hover:-translate-y-1 hover:border-[#245EDB]/40 hover:bg-white/90">
+                <div className="mb-2 flex items-center justify-between"><Code2 size={18} className="text-[#245EDB]" /><span className="text-xs text-emerald-600">Ready</span></div>
+                <p className="font-semibold">Explore skills</p>
+                <p className={`mt-1 text-xs ${mutedText}`}>View my technical toolkit</p>
+              </button>
+              <button onClick={() => openWindow("experience")} className="group rounded-[16px] border border-transparent bg-white/60 p-3 text-left transition hover:-translate-y-1 hover:border-[#245EDB]/40 hover:bg-white/90">
+                <div className="mb-2 flex items-center justify-between"><BriefcaseBusiness size={18} className="text-[#245EDB]" /><span className="text-xs text-sky-600">2026</span></div>
+                <p className="font-semibold">See experience</p>
+                <p className={`mt-1 text-xs ${mutedText}`}>Follow my current work</p>
+              </button>
+              <button onClick={() => openWindow("contact")} className="group rounded-[16px] border border-transparent bg-white/60 p-3 text-left transition hover:-translate-y-1 hover:border-[#245EDB]/40 hover:bg-white/90">
+                <div className="mb-2 flex items-center justify-between"><Mail size={18} className="text-[#245EDB]" /><span className="text-xs text-amber-600">Open</span></div>
+                <p className="font-semibold">Start a conversation</p>
+                <p className={`mt-1 text-xs ${mutedText}`}>Send a project inquiry</p>
+              </button>
+            </div>
           </div>
         );
       case "about":
@@ -460,7 +519,6 @@ export default function Home() {
                     <div key={item.label}>
                       <div className="mb-1 flex items-center justify-between text-sm">
                         <span>{item.label}</span>
-                        <span className={`text-xs ${mutedText}`}>{item.proficiency}%</span>
                       </div>
                       <div className={`h-2 rounded-full ${theme === "xp" ? "bg-slate-200" : "bg-slate-800"}`}>
                         <div className="h-2 rounded-full bg-gradient-to-r from-[#245EDB] to-[#3B82F6]" style={{ width: `${item.proficiency}%` }} />
@@ -574,10 +632,12 @@ export default function Home() {
                 </div>
                 <span className={`rounded-full px-3 py-1 text-xs ${theme === "xp" ? "bg-[#5ABF41]/10 text-[#5ABF41]" : "bg-slate-800 text-slate-100"}`}>Available for hire</span>
               </div>
-              <div className={`rounded-[16px] border ${theme === "xp" ? "border-slate-200 bg-slate-50" : "border-slate-700 bg-slate-950"} p-4 ${panelText} text-sm leading-7`}>
-                <p><strong>Core Focus:</strong> UX architecture, interface systems, and high-end front-end delivery.</p>
-                <p><strong>Experience:</strong> 2 years of experience as a Computer Science Student</p>
-                <p><strong>Toolkit:</strong> React, Next.js, TypeScript, Python, C, Figma.</p>
+              <div className={`overflow-hidden rounded-[16px] border ${theme === "xp" ? "border-slate-200 bg-slate-100" : "border-slate-700 bg-slate-950"}`}>
+                <iframe
+                  src={`${resumeFile}#view=FitH`}
+                  title="Gian Karlo C. Reguindin CV preview"
+                  className="h-[520px] w-full bg-white"
+                />
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -601,7 +661,7 @@ export default function Home() {
                 </label>
                 <label className="text-sm">
                   <span className="mb-1 block">Email</span>
-                  <input type="email" value={contactForm.email} onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))} className={`w-full rounded-[12px] border px-3 py-2 ${theme === "xp" ? "border-slate-200 bg-white text-slate-900" : "border-slate-700 bg-slate-950 text-slate-100"}`} placeholder="you@example.com" />
+                  <input type="email" value={contactForm.email} onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))} className={`w-full rounded-[12px] border px-3 py-2 ${theme === "xp" ? "border-slate-200 bg-white text-slate-900" : "border-slate-700 bg-slate-950 text-slate-100"}`} placeholder="xxxx@google.com" />
                 </label>
               </div>
               <label className="mt-3 block text-sm">
@@ -670,6 +730,9 @@ export default function Home() {
 
   return (
     <div className={`relative min-h-screen overflow-hidden ${shellClasses}`}>
+      <div className="custom-cursor" aria-hidden="true" style={{ left: pointer.x, top: pointer.y }}>
+        <MousePointer2 size={26} strokeWidth={2.5} />
+      </div>
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,_rgba(255,255,255,0.45),_transparent_30%),radial-gradient(circle_at_80%_15%,_rgba(255,255,255,0.2),_transparent_25%),linear-gradient(180deg,_rgba(255,255,255,0.12),_transparent_60%)]" />
         <div className="cloud cloud-a" />
@@ -690,10 +753,24 @@ export default function Home() {
 
       <main className="relative z-10 flex min-h-screen flex-col justify-between px-3 pb-20 pt-3 sm:px-5 lg:px-8">
         <section className="flex-1">
-          <div className="flex flex-wrap gap-3">
+          <div className={`mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[18px] border px-4 py-3 shadow-lg backdrop-blur-xl ${theme === "xp" ? "border-white/60 bg-white/35 text-slate-900" : "border-slate-700/70 bg-slate-950/55 text-slate-100"}`}>
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-[12px] bg-gradient-to-br from-[#245EDB] to-[#6BA4FF] text-sm font-bold text-white shadow-md">G</div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.28em]">Gian-OS Desktop</p>
+                <p className={`mt-1 text-[10px] ${mutedText}`}>Creative workspace / portfolio system</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em]">
+              <span className={`status-pulse h-2 w-2 rounded-full ${theme === "xp" ? "bg-emerald-500" : "bg-emerald-300"}`} />
+              <span className={mutedText}>System online</span>
+              <span className={`hidden rounded-full border px-2 py-1 sm:inline-flex ${theme === "xp" ? "border-white/60 bg-white/50" : "border-slate-700 bg-slate-900/60"}`}>v1.0</span>
+            </div>
+          </div>
+          <div className="desktop-grid flex flex-wrap gap-3">
             {desktopIcons.map((icon) => (
-              <motion.button key={icon.id} whileHover={{ y: -4, scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => icon.title === "Recycle Bin" ? setBsod(true) : openWindow(icon.id)} className={`flex min-w-[7.5rem] flex-col items-center justify-center gap-1.5 rounded-[16px] border p-3 text-center backdrop-blur-sm transition ${theme === "xp" ? "border-white/30 bg-white/20 text-slate-900" : "border-slate-700/50 bg-slate-950/60 text-slate-100 hover:bg-slate-900/70"}`}>
-                <div className={`flex h-12 w-12 items-center justify-center rounded-[14px] ${theme === "xp" ? "bg-white/80 text-[#245EDB]" : "bg-slate-800 text-sky-300"} shadow-lg`}>{icon.icon}</div>
+              <motion.button key={icon.id} whileHover={{ y: -5, scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => icon.title === "Recycle Bin" ? setBsod(true) : openWindow(icon.id)} className={`group flex min-w-[7.5rem] flex-col items-center justify-center gap-1.5 rounded-[16px] border p-3 text-center backdrop-blur-sm transition ${theme === "xp" ? "border-white/30 bg-white/20 text-slate-900 hover:border-white/70 hover:bg-white/35" : "border-slate-700/50 bg-slate-950/60 text-slate-100 hover:bg-slate-900/70"}`}>
+                <div className={`desktop-icon-art flex h-12 w-12 items-center justify-center rounded-[14px] ${theme === "xp" ? "bg-white/80 text-[#245EDB]" : "bg-slate-800 text-sky-300"} shadow-lg`}>{icon.icon}</div>
                 <span className="max-w-full break-words whitespace-normal text-[10px] font-medium leading-4">{icon.title}</span>
               </motion.button>
             ))}
@@ -706,7 +783,14 @@ export default function Home() {
               const rect = { width: Math.min(sizes[windowId].width, viewPort.width - 24), height: Math.min(sizes[windowId].height, viewPort.height - 100) };
               return (
                 <motion.div key={windowId} initial={{ opacity: 0, y: 16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.98 }} transition={{ duration: 0.18 }} onMouseDown={() => focusWindow(windowId)} className={`absolute overflow-hidden rounded-[20px] border shadow-[0_20px_70px_rgba(0,0,0,0.24)] backdrop-blur-xl ${theme === "xp" ? "border-white/55 bg-white/80 text-slate-800" : "border-slate-700/70 bg-slate-900/80 text-slate-100"}`} style={{ left: positions[windowId].x, top: positions[windowId].y, width: maximized[windowId] ? Math.max((viewPort.width * 3) / 4, 640) : rect.width, height: maximized[windowId] ? Math.max((viewPort.height * 3) / 4, 480) : rect.height, zIndex: 50 + index }}>
-                  <div className="flex items-center justify-between bg-gradient-to-r from-[#245EDB] via-[#3B82F6] to-[#6BA4FF] px-3 py-2 text-white">
+                  <div
+                    className="flex cursor-move items-center justify-between bg-gradient-to-r from-[#245EDB] via-[#3B82F6] to-[#6BA4FF] px-3 py-2 text-white"
+                    onMouseDown={(event) => beginWindowDrag(windowId, event.clientX, event.clientY)}
+                    onTouchStart={(event) => {
+                      const touch = event.touches[0];
+                      beginWindowDrag(windowId, touch.clientX, touch.clientY);
+                    }}
+                  >
                     <div className="flex items-center gap-2">
                       {app.icon}
                       <span className="text-sm font-medium">{app.title}</span>
@@ -722,12 +806,12 @@ export default function Home() {
                       className="cursor-grab"
                       onMouseDown={(event) => {
                         event.stopPropagation();
-                        setDragging({ id: windowId, offsetX: event.clientX - positions[windowId].x, offsetY: event.clientY - positions[windowId].y });
+                        beginWindowDrag(windowId, event.clientX, event.clientY);
                       }}
                       onTouchStart={(event) => {
                         event.stopPropagation();
                         const touch = event.touches[0];
-                        setDragging({ id: windowId, offsetX: touch.clientX - positions[windowId].x, offsetY: touch.clientY - positions[windowId].y });
+                        beginWindowDrag(windowId, touch.clientX, touch.clientY);
                       }}
                     >
                       {renderWindowContent(windowId)}
@@ -741,7 +825,19 @@ export default function Home() {
 
         <footer className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-[22px] border px-3 py-2 shadow-[0_10px_35px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:px-4 ${glassClasses}`}>
           <div className="flex items-center gap-2">
-            <button onClick={() => setStartOpen((prev) => !prev)} className="rounded-[14px] bg-gradient-to-r from-[#245EDB] to-[#3B82F6] px-3 py-2 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5">Start</button>
+            <button
+              type="button"
+              data-start-toggle
+              aria-expanded={startOpen}
+              aria-controls="windows-start-menu"
+              onClick={(event) => {
+                event.stopPropagation();
+                setStartOpen((prev) => !prev);
+              }}
+              className="rounded-[14px] bg-gradient-to-r from-[#245EDB] to-[#3B82F6] px-3 py-2 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5"
+            >
+              Start
+            </button>
             <div className="hidden gap-2 sm:flex">
               {openWindows.filter((id) => !minimized[id]).map((windowId) => {
                 const app = apps.find((entry) => entry.id === windowId);
@@ -768,30 +864,41 @@ export default function Home() {
 
       <AnimatePresence>
         {startOpen && (
-          <motion.div data-start-menu initial={{ opacity: 0, y: 20, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.96 }} className={`absolute bottom-24 left-3 z-[120] w-[320px] rounded-[24px] border p-3 shadow-[0_20px_70px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:left-6 ${theme === "xp" ? "border-white/60 bg-white/85" : "border-slate-700/70 bg-slate-950/95"}`}>
-            <div className="rounded-[18px] bg-gradient-to-r from-[#245EDB] to-[#3B82F6] p-4 text-white">
+          <motion.div id="windows-start-menu" data-start-menu initial={{ opacity: 0, y: 20, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.96 }} className={`absolute bottom-24 left-3 z-[120] w-[min(430px,calc(100vw-24px))] overflow-hidden rounded-[12px] border-2 shadow-[0_20px_50px_rgba(0,0,0,0.35)] sm:left-6 ${theme === "xp" ? "border-[#245EDB] bg-white" : "border-slate-700 bg-slate-950"}`}>
+            <div className="border-b border-[#1f4bb8] bg-gradient-to-b from-[#6BA4FF] via-[#3B82F6] to-[#245EDB] p-3 text-white">
               <div className="flex items-center gap-3">
-                <div className={`flex h-11 w-11 items-center justify-center rounded-full ${theme === "xp" ? "bg-white/30 text-slate-900" : "bg-slate-800 text-slate-100"} text-xl`}>A</div>
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-[8px] border-2 border-white/80 bg-white/30 shadow-lg">
+                  <Image src={profileImage} alt="Gian Karlo C. Reguindin" fill sizes="64px" className="object-cover" />
+                </div>
                 <div>
                   <p className="text-lg font-semibold">Gian Karlo C. Reguindin</p>
                   <p className="text-sm opacity-80">Full Stack Developer</p>
                 </div>
               </div>
             </div>
-            <div className="mt-3 space-y-2">
-              {startItems.map((item) => (
-                <button key={item.id} onClick={() => handleStartAction(item.id)} className={`flex w-full items-center justify-between rounded-[14px] px-3 py-2 text-left text-sm transition ${theme === "xp" ? "bg-white/70 text-slate-900 hover:bg-white" : "bg-slate-900/80 text-slate-100 hover:bg-slate-900"}`}>
-                  <span className="flex items-center gap-2">{item.icon}{item.label}</span>
-                  <span className={`${theme === "xp" ? "text-slate-400" : "text-slate-400/90"}`}>›</span>
-                </button>
-              ))}
-              <button onClick={() => window.open("https://github.com/Nykt04")} className={`flex w-full items-center justify-between rounded-[14px] px-3 py-2 text-left text-sm transition ${theme === "xp" ? "bg-white/70 text-slate-900 hover:bg-white" : "bg-slate-900/80 text-slate-100 hover:bg-slate-900"}`}><span className="flex items-center gap-2"><GitBranch size={16} />GitHub</span><span className={`${theme === "xp" ? "text-slate-400" : "text-slate-400/90"}`}>›</span></button>
-              <button onClick={() => window.open("https://www.linkedin.com/in/gian-karlo-reguindin-762712349/", "_blank")} className={`flex w-full items-center justify-between rounded-[14px] px-3 py-2 text-left text-sm transition ${theme === "xp" ? "bg-white/70 text-slate-900 hover:bg-white" : "bg-slate-900/80 text-slate-100 hover:bg-slate-900"}`}><span className="flex items-center gap-2"><Link size={16} />LinkedIn</span><span className={`${theme === "xp" ? "text-slate-400" : "text-slate-400/90"}`}>›</span></button>
+            <div className="grid gap-0 sm:grid-cols-2">
+              <div className={`flex min-h-[260px] flex-col p-3 ${theme === "xp" ? "bg-white text-slate-900" : "bg-slate-950 text-slate-100"}`}>
+                <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Programs</p>
+                {startItems.map((item) => (
+                  <button key={item.id} onClick={() => handleStartAction(item.id)} className="flex w-full items-center gap-2 rounded-[6px] px-3 py-2 text-left text-sm transition hover:bg-blue-50">
+                    <span className="text-[#245EDB]">{item.icon}</span><span>{item.label}</span>
+                  </button>
+                ))}
+                <button onClick={() => openWindow("projects")} className="mt-auto flex items-center justify-between border-t border-slate-200 px-3 pt-3 text-left text-sm font-semibold text-slate-700 hover:text-[#245EDB]"><span>All Programs</span><span className="text-lg text-[#5ABF41]">›</span></button>
+              </div>
+              <div className={`min-h-[260px] space-y-1 border-l p-3 ${theme === "xp" ? "border-slate-200 bg-[#dce9fa] text-slate-900" : "border-slate-700 bg-slate-900 text-slate-100"}`}>
+                <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Places</p>
+                <button onClick={() => window.open("https://github.com/Nykt04", "_blank")} className="flex w-full items-center gap-2 rounded-[6px] px-3 py-2 text-left text-sm transition hover:bg-white/70"><GitBranch size={16} className="text-[#245EDB]" />GitHub</button>
+                <button onClick={() => window.open("https://www.linkedin.com/in/gian-karlo-reguindin-762712349/", "_blank")} className="flex w-full items-center gap-2 rounded-[6px] px-3 py-2 text-left text-sm transition hover:bg-white/70"><Link size={16} className="text-[#245EDB]" />LinkedIn</button>
+                <button onClick={() => openWindow("projects")} className="flex w-full items-center gap-2 rounded-[6px] px-3 py-2 text-left text-sm transition hover:bg-white/70"><FolderKanban size={16} className="text-[#245EDB]" />Recent projects</button>
+                <button onClick={() => openWindow("about")} className="flex w-full items-center gap-2 rounded-[6px] px-3 py-2 text-left text-sm transition hover:bg-white/70"><UserCircle2 size={16} className="text-[#245EDB]" />About this portfolio</button>
+              </div>
             </div>
-            <button onClick={triggerShutdown} className={`mt-3 flex w-full items-center justify-between rounded-[14px] px-3 py-2 text-left text-sm transition ${theme === "xp" ? "border border-slate-200 bg-slate-50 text-slate-900 hover:bg-white" : "border border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800"}`}>
+            <div className={`flex items-center justify-end gap-2 border-t px-3 py-2 ${theme === "xp" ? "border-slate-300 bg-[#eef4fc]" : "border-slate-700 bg-slate-950"}`}>
+              <button onClick={triggerShutdown} className={`flex items-center gap-2 rounded-[6px] px-3 py-2 text-left text-sm transition hover:-translate-y-0.5 ${theme === "xp" ? "text-slate-900 hover:bg-white" : "text-slate-100 hover:bg-slate-800"}`}>
               <span className="flex items-center gap-2"><PowerIcon />Shutdown</span>
-              <span className={`${theme === "xp" ? "text-slate-400" : "text-slate-400/90"}`}>›</span>
-            </button>
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -849,14 +956,69 @@ export default function Home() {
       </AnimatePresence>
 
       <AnimatePresence>
+        {restartRequired && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[190] flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm">
+            <motion.div initial={{ y: 18, scale: 0.96 }} animate={{ y: 0, scale: 1 }} className="w-full max-w-sm overflow-hidden rounded-[14px] border border-slate-300 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+              <div className="flex items-center gap-3 bg-gradient-to-r from-[#245EDB] to-[#3B82F6] px-4 py-3 text-white">
+                <PowerIcon />
+                <span className="text-sm font-semibold">GianOS System Notification</span>
+              </div>
+              <div className="space-y-4 p-5 text-slate-900">
+                <div>
+                  <h2 className="text-lg font-semibold">Restart required</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">The system has finished shutting down. Restart the portfolio desktop to continue.</p>
+                </div>
+                <div className="flex justify-end">
+                  <button type="button" onClick={restartSystem} className="rounded-[8px] bg-[#245EDB] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1f4bb8]">Restart now</button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {booting && (
           <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[220] flex items-center justify-center bg-[radial-gradient(circle_at_top_left,_#245EDB,_#071b3a)] text-white">
             <div className="text-center">
-              <div className="mb-6 text-4xl font-semibold">Windows XP</div>
+              <div className="mb-6 text-4xl font-semibold">Now Loading</div>
               <div className="mx-auto h-2 w-48 overflow-hidden rounded-full bg-white/20">
                 <motion.div animate={{ width: [0, 180, 200] }} transition={{ duration: 2.2, ease: "easeInOut" }} className="h-2 rounded-full bg-white" />
               </div>
               <p className="mt-4 text-sm opacity-80">Loading your modern portfolio experience…</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {welcomeScreen && !booting && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[215] flex items-center justify-center bg-[linear-gradient(135deg,_#245EDB_0%,_#3B82F6_48%,_#6BA4FF_100%)] p-6 text-white">
+            <div className="w-full max-w-3xl">
+              <div className="mb-12 flex items-center justify-between border-b border-white/30 pb-4">
+                <div className="text-2xl font-semibold tracking-tight">Microsoft Windows XP</div>
+                <div className="text-xs uppercase tracking-[0.24em] text-white/75">GianOS Edition</div>
+              </div>
+              <div className="grid items-center gap-10 md:grid-cols-[1fr_auto]">
+                <div>
+                  <p className="text-5xl font-semibold tracking-tight sm:text-7xl">Welcome</p>
+                  <p className="mt-4 max-w-md text-sm leading-7 text-white/80">Select your profile to enter the portfolio desktop.</p>
+                </div>
+                <button type="button" onClick={() => setWelcomeScreen(false)} className="group flex w-full items-center gap-5 rounded-[14px] border border-white/40 bg-white/15 p-5 text-left shadow-[0_16px_40px_rgba(0,0,0,0.2)] transition hover:-translate-y-1 hover:bg-white/25 md:w-[380px]">
+                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[12px] border-2 border-white/80 bg-white/30 shadow-lg">
+                    <Image src={profileImage} alt="Gian Karlo C. Reguindin profile" fill sizes="96px" className="object-cover" />
+                  </div>
+                  <div className="pr-4">
+                    <p className="text-xl font-semibold leading-tight">Gian Karlo C. Reguindin</p>
+                    <p className="mt-2 text-base text-white/75">Full Stack Developer</p>
+                    <p className="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/90">Enter desktop</p>
+                  </div>
+                </button>
+              </div>
+              <div className="mt-16 flex items-center justify-between border-t border-white/30 pt-4 text-xs text-white/70">
+                <span>After you log on, you can add or change accounts.</span>
+                <span>Turn off computer</span>
+              </div>
             </div>
           </motion.div>
         )}
